@@ -2,18 +2,14 @@ within DistrictHeating.HeatingSystems.Control;
 model SupplyTControl
   extends PartialHXControl;
 
-  Hysteresis hysteresis(
+  replaceable Hysteresis hysteresis(
     release=true,
     realTrue=0,
     realFalse=1,
     uLow=273.15 + 68,
-    uHigh=273.15 + 72)
-    annotation (Placement(transformation(extent={{-16,-10},{4,10}})));
+    uHigh=273.15 + 72) constrainedby PartialControl
+    annotation (Placement(transformation(extent={{-16,-10},{4,10}})), choicesAllMatching=true);
 equation
-  connect(hysteresis.y, y) annotation (Line(
-      points={{4.8,0},{106,0}},
-      color={0,0,127},
-      smooth=Smooth.None));
   connect(senMassFlow2, hysteresis.u1) annotation (Line(
       points={{104,80},{-6,80},{-6,10.8}},
       color={0,0,127},
@@ -22,8 +18,8 @@ equation
       points={{104,-40},{-28,-40},{-28,0},{-17.2,0}},
       color={0,0,127},
       smooth=Smooth.None));
-  annotation (Diagram(coordinateSystem(preserveAspectRatio=false, extent={{
-            -100,-100},{100,100}}), graphics), Icon(coordinateSystem(
+  annotation (Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,
+            -100},{100,100}}),      graphics), Icon(coordinateSystem(
           preserveAspectRatio=false, extent={{-100,-100},{100,100}}),
         graphics={
         Polygon(

@@ -1,0 +1,50 @@
+within DistrictHeating.HeatingSystems.Control;
+model SupplyTControlPI
+  extends PartialHXControl;
+
+  Hysteresis hysteresis(
+    release=true,
+    realTrue=0,
+    realFalse=1,
+    uLow=273.15 + 68,
+    uHigh=273.15 + 72)
+    annotation (Placement(transformation(extent={{-16,-10},{4,10}})));
+  Modelica.Blocks.Continuous.LimPID PID(controllerType=Modelica.Blocks.Types.SimpleController.PI)
+    annotation (Placement(transformation(extent={{34,-10},{54,10}})));
+equation
+  connect(senMassFlow2, hysteresis.u1) annotation (Line(
+      points={{104,80},{-6,80},{-6,10.8}},
+      color={0,0,127},
+      smooth=Smooth.None));
+  connect(T1, hysteresis.u) annotation (Line(
+      points={{104,-40},{-28,-40},{-28,0},{-17.2,0}},
+      color={0,0,127},
+      smooth=Smooth.None));
+  annotation (Diagram(coordinateSystem(preserveAspectRatio=false, extent={{
+            -100,-100},{100,100}}), graphics), Icon(coordinateSystem(
+          preserveAspectRatio=false, extent={{-100,-100},{100,100}}),
+        graphics={              Rectangle(
+        extent={{-100,-100},{100,100}},
+        lineColor={0,0,127},
+        fillColor={255,255,255},
+        fillPattern=FillPattern.Solid),
+        Line(points={{-80,78},{-80,-90}}, color={192,192,192}),
+        Polygon(
+          points={{-80,90},{-88,68},{-72,68},{-80,90}},
+          lineColor={192,192,192},
+          fillColor={192,192,192},
+          fillPattern=FillPattern.Solid),
+        Line(points={{-90,-80},{82,-80}}, color={192,192,192}),
+        Polygon(
+          points={{90,-80},{68,-72},{68,-88},{90,-80}},
+          lineColor={192,192,192},
+          fillColor={192,192,192},
+          fillPattern=FillPattern.Solid),
+        Line(points={{-80,-80},{-80,-20},{30,60},{80,60}}, color={0,0,127}),
+        Text(
+          extent={{52,-60},{-36,18}},
+          lineColor={0,128,255},
+          fillColor={255,255,255},
+          fillPattern=FillPattern.Solid,
+          textString="T")}));
+end SupplyTControlPI;

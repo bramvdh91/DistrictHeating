@@ -16,17 +16,15 @@ model ExampleDHConnections
           KV=2.25, KVs=2.4)))
     annotation (Placement(transformation(extent={{-56,26},{-36,46}})));
 
-  IDEAS.Fluid.Production.PolynomialProduction
-                                  boiler(
+  IDEAS.Fluid.Production.Boiler   boiler(
     m_flow_nominal=0.5,
     dp_nominal=200,
     redeclare package Medium = IDEAS.Media.Water.Simple,
-    QNom(displayUnit="kW") = 30000,
-    redeclare IDEAS.Fluid.Production.Data.Polynomials.Boiler2ndDegree data)
+    QNom(displayUnit="kW") = 30000)
                       annotation (Placement(transformation(
         extent={{-10,-11},{10,11}},
         rotation=180,
-        origin={80,5})));
+        origin={84,7})));
 
   Modelica.Blocks.Sources.Constant const1(k=273 + 70)
     annotation (Placement(transformation(extent={{40,-50},{60,-30}})));
@@ -105,12 +103,12 @@ equation
 
   //BoilerViaPartials.TSet = sim.Te;
   connect(const1.y, boiler.TSet) annotation (Line(
-      points={{61,-40},{76,-40},{76,-6.44}},
+      points={{61,-40},{80,-40},{80,-4.44}},
       color={0,0,127},
       smooth=Smooth.None));
 
   connect(returnT.port_b, boiler.port_a) annotation (Line(
-      points={{40,-16},{69.8,-16},{69.8,0.6}},
+      points={{40,-16},{74,-16},{74,2.6}},
       color={0,127,255},
       smooth=Smooth.None));
   connect(dHConnection.flowPort_supply_in, dHConnection1.flowPort_supply_out)
@@ -119,7 +117,7 @@ equation
       color={0,0,0},
       smooth=Smooth.None));
   connect(supply.port_a, boiler.port_b) annotation (Line(
-      points={{60,28},{69.8,28},{69.8,9.4}},
+      points={{60,28},{74,28},{74,11.4}},
       color={0,127,255},
       smooth=Smooth.None));
   connect(dHConnection.flowPort_return_out, dHConnection1.flowPort_return_in)

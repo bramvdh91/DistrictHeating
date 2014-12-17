@@ -28,7 +28,7 @@ model IndirectSH
       dp2_nominal(displayUnit="Pa") = 200,
       dp1_nominal(displayUnit="Pa") = 200,
       p(displayUnit="bar") = 200000),
-    redeclare Control.SupplyTControl  partialHXControl,
+    redeclare Control.PI              partialHXControl,
     direct(m1_flow_nominal=m_flow_nominal, m2_flow_nominal=m_flow_nominal));
 
   Modelica.Thermal.HeatTransfer.Sources.FixedHeatFlow fixedHeatFlow[nZones](Q_flow=0)
