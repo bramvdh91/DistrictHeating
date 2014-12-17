@@ -20,14 +20,18 @@ model ExampleDHConnections
     m_flow_nominal=0.5,
     dp_nominal=200,
     redeclare package Medium = IDEAS.Media.Water.Simple,
-    QNom(displayUnit="kW") = 30000)
+    redeclare
+      IDEAS.Fluid.Production.BaseClasses.HeatSources.PerformanceMap3DHeatSource
+      heatSource(redeclare IDEAS.Fluid.Production.Data.PerformanceMaps.Boiler3D
+        data),
+    QNom(displayUnit="kW") = 15000)
                       annotation (Placement(transformation(
         extent={{-10,-11},{10,11}},
         rotation=180,
         origin={84,7})));
 
   Modelica.Blocks.Sources.Constant const1(k=273 + 70)
-    annotation (Placement(transformation(extent={{40,-50},{60,-30}})));
+    annotation (Placement(transformation(extent={{40,-60},{60,-40}})));
   Interfaces.DHConnection dHConnection(
     m_flow_nominal=0.5,
     Tsupply(allowFlowReversal=false),
@@ -103,7 +107,7 @@ equation
 
   //BoilerViaPartials.TSet = sim.Te;
   connect(const1.y, boiler.TSet) annotation (Line(
-      points={{61,-40},{80,-40},{80,-4.44}},
+      points={{61,-50},{80,-50},{80,-4.44}},
       color={0,0,127},
       smooth=Smooth.None));
 
