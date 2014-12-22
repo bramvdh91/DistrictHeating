@@ -11,9 +11,9 @@ model ThermostaticSafetyValve
   IDEAS.Fluid.Actuators.Valves.TwoWayEqualPercentage val(
     redeclare package Medium = Medium,
     m_flow_nominal=m_flow_nominal,
-    dpValve_nominal=2000)
+    dpValve_nominal=20000)
     annotation (Placement(transformation(extent={{-10,-10},{10,10}})));
-  Modelica.Blocks.Continuous.LimPID PID(controllerType=Modelica.Blocks.Types.SimpleController.PI)
+  Modelica.Blocks.Continuous.LimPID PID(controllerType=Modelica.Blocks.Types.SimpleController.PI, Ti=1800)
     annotation (Placement(transformation(extent={{-40,38},{-20,58}})));
   IDEAS.Fluid.Sensors.Temperature senTem(redeclare package Medium = Medium)
     annotation (Placement(transformation(extent={{-62,8},{-42,28}})));

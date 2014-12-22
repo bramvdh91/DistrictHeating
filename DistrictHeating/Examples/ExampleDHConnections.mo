@@ -13,20 +13,19 @@ model ExampleDHConnections
     redeclare IDEAS.VentilationSystems.None ventilationSystem,
     redeclare IDEAS.Buildings.Examples.BaseClasses.structure building,
     redeclare IDEAS.Occupants.Standards.None occupant(TSet_val=296.15),
-    redeclare DistrictHeating.HeatingSystems.IndirectSH heatingSystem(direct(KV
-          =2.25, KVs=2.4)))
+    redeclare DistrictHeating.HeatingSystems.IndirectSH heatingSystem(direct(KV=
+           2.25, KVs=2.4)))
     annotation (Placement(transformation(extent={{-50,26},{-30,46}})));
 
-
-  Modelica.Blocks.Sources.Constant boilerSetPoint(k=273 + 72)
+  Modelica.Blocks.Sources.Constant boilerSetPoint(k=273 + 74)
     annotation (Placement(transformation(extent={{40,-60},{60,-40}})));
   Interfaces.BuildingDH buildingLeft(
     redeclare IDEAS.Occupants.Standards.None occupant(TSet_val=296.15),
     redeclare IDEAS.Interfaces.BaseClasses.CausalInhomeFeeder inHomeGrid,
     redeclare IDEAS.VentilationSystems.None ventilationSystem,
     redeclare IDEAS.Buildings.Examples.BaseClasses.structure building,
-    redeclare DistrictHeating.HeatingSystems.IndirectSH heatingSystem(direct(KV
-          =3.8, KVs=2.4)))
+    redeclare DistrictHeating.HeatingSystems.IndirectSH heatingSystem(direct(KV=
+           3.8, KVs=2.4)))
     annotation (Placement(transformation(extent={{-74,26},{-54,46}})));
   IDEAS.Fluid.Movers.FlowMachine_dp
                               fan1(
@@ -109,13 +108,13 @@ equation
       points={{0.6,50},{16.2,50},{16.2,40}},
       color={0,0,127},
       smooth=Smooth.None));
-  connect(dHConnection1.flowPortIn, buildingLeft.flowPortReturnOut) annotation
-    (Line(
+  connect(dHConnection1.flowPortIn, buildingLeft.flowPortReturnOut) annotation (
+     Line(
       points={{-66,16},{-66,26.2}},
       color={0,0,0},
       smooth=Smooth.None));
-  connect(dHConnection1.flowPortOut, buildingLeft.flowPortSupplyIn) annotation
-    (Line(
+  connect(dHConnection1.flowPortOut, buildingLeft.flowPortSupplyIn) annotation (
+     Line(
       points={{-62,16},{-62,26.2}},
       color={0,0,0},
       smooth=Smooth.None));
