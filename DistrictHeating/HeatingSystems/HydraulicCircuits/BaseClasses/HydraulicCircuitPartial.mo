@@ -16,7 +16,8 @@ partial model HydraulicCircuitPartial "Partial for a hydraulic circuit"
     redeclare package Medium = Medium1,
     m=m,
     UA=UA,
-    m_flow_nominal=m1_flow_nominal) annotation (Placement(transformation(
+    m_flow_nominal=m1_flow_nominal,
+    dp_nominal=20)                  annotation (Placement(transformation(
         extent={{-10,4},{10,-4}},
         rotation=0,
         origin={-80,60})));
@@ -24,7 +25,8 @@ partial model HydraulicCircuitPartial "Partial for a hydraulic circuit"
     redeclare package Medium = Medium1,
     m=m,
     UA=UA,
-    m_flow_nominal=m2_flow_nominal) annotation (Placement(transformation(
+    m_flow_nominal=m2_flow_nominal,
+    dp_nominal=20)                  annotation (Placement(transformation(
         extent={{-10,4},{10,-4}},
         rotation=180,
         origin={-80,-60})));

@@ -7,7 +7,7 @@ model TwinPipeGround "Twin pipe model for symmetric pipes in the ground"
     ha=1/haInvers);
 
   //Parameters
-  parameter Modelica.SIunits.Length Dc=1
+  parameter Modelica.SIunits.Length Dc=2.75*Di
     "Outer diameter of the larger circumscribing pipe";
 protected
   parameter Modelica.SIunits.Length rc=Dc/2

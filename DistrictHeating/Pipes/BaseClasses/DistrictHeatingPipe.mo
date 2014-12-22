@@ -19,7 +19,8 @@ partial model DistrictHeatingPipe
     "Thermal conductivity of the ground surface [W/mK]";
 
   parameter Modelica.SIunits.Length H=2 "Buried depth of the pipe";
-  parameter Modelica.SIunits.Length E=0.8 "Horizontal distance between pipes";
+  parameter Modelica.SIunits.Length E=1.25*Di
+    "Horizontal distance between pipes";
 
   parameter Modelica.SIunits.Length Do=0.2 "Equivalent outer diameter";
   parameter Modelica.SIunits.Length Di=0.2 "Equivalent inner diameter";

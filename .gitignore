@@ -1,0 +1,13 @@
+*log.txt
+dsmodel*
+fmiModelIdentifier*
+simulateDLL*
+stop
+.ipynb_checkpoints
+results*
+status
+success
+failure
+*.exp
+*.lib
+*FMUOutput

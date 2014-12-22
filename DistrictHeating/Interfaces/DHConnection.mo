@@ -37,23 +37,6 @@ model DHConnection
         Medium) "Supply line to the building"
     annotation (Placement(transformation(extent={{10,10},{30,30}})));
 
-  IDEAS.Fluid.FixedResistances.SplitterFixedResistanceDpM spl9(
-    redeclare package Medium = Medium,
-    dp_nominal={0,0,0},
-    m_flow_nominal={m_flow_nominal,-m_flow_nominal,-m_flow_nominal})
-    annotation (Placement(transformation(
-        extent={{-10,-10},{10,10}},
-        rotation=180,
-        origin={0,-40})));
-  IDEAS.Fluid.FixedResistances.SplitterFixedResistanceDpM spl10(
-    from_dp=false,
-    redeclare package Medium = Medium,
-    dp_nominal={0,0,0},
-    m_flow_nominal={m_flow_nominal,-m_flow_nominal,m_flow_nominal}) annotation (
-     Placement(transformation(
-        extent={{10,-10},{-10,10}},
-        rotation=180,
-        origin={-20,-80})));
 
   Modelica.Blocks.Sources.RealExpression realExpression(y=sim.Tground)
     annotation (Placement(transformation(extent={{6,-116},{26,-96}})));
@@ -76,18 +59,6 @@ equation
       points={{48,-54},{60,-54},{60,-40},{100,-40}},
       color={0,127,255},
       smooth=Smooth.None));
-  connect(spl9.port_1, districtHeatingPipe.port_b1) annotation (Line(
-      points={{10,-40},{16,-40},{16,-54},{28,-54}},
-      color={0,127,255},
-      smooth=Smooth.None));
-  connect(spl10.port_2, districtHeatingPipe.port_a2) annotation (Line(
-      points={{-10,-80},{16,-80},{16,-66},{28,-66}},
-      color={0,127,255},
-      smooth=Smooth.None));
-  connect(flowPort_return_in, spl10.port_1) annotation (Line(
-      points={{-100,-80},{-30,-80}},
-      color={0,0,0},
-      smooth=Smooth.None));
   connect(realExpression.y, districtHeatingPipe.Tg) annotation (Line(
       points={{27,-106},{38,-106},{38,-74.2}},
       color={0,0,127},
@@ -96,24 +67,28 @@ equation
       points={{20,20},{20,6}},
       color={0,0,0},
       smooth=Smooth.None));
-  connect(Tsupply.port_a, spl9.port_3) annotation (Line(
-      points={{20,-14},{20,-20},{1.33227e-015,-20},{1.33227e-015,-30}},
-      color={0,127,255},
-      smooth=Smooth.None));
-  connect(spl10.port_3, TReturn.port_b) annotation (Line(
-      points={{-20,-70},{-20,-28}},
-      color={0,127,255},
-      smooth=Smooth.None));
   connect(TReturn.port_a, flowPortIn) annotation (Line(
       points={{-20,-8},{-20,20}},
       color={0,127,255},
       smooth=Smooth.None));
-  connect(spl9.port_2, flowPort_supply_out) annotation (Line(
-      points={{-10,-40},{-100,-40}},
-      color={0,127,255},
-      smooth=Smooth.None));
   connect(districtHeatingPipe.port_b2, flowPort_return_out) annotation (Line(
       points={{48,-66},{60,-66},{60,-80},{100,-80}},
+      color={0,127,255},
+      smooth=Smooth.None));
+  connect(flowPort_return_in, districtHeatingPipe.port_a2) annotation (Line(
+      points={{-100,-80},{-8,-80},{-8,-66},{28,-66}},
+      color={0,0,0},
+      smooth=Smooth.None));
+  connect(districtHeatingPipe.port_b1, flowPort_supply_out) annotation (Line(
+      points={{28,-54},{0,-54},{0,-40},{-100,-40}},
+      color={0,127,255},
+      smooth=Smooth.None));
+  connect(TReturn.port_b, districtHeatingPipe.port_a2) annotation (Line(
+      points={{-20,-28},{-20,-80},{-8,-80},{-8,-66},{28,-66}},
+      color={0,127,255},
+      smooth=Smooth.None));
+  connect(Tsupply.port_a, flowPort_supply_out) annotation (Line(
+      points={{20,-14},{20,-54},{0,-54},{0,-40},{-100,-40}},
       color={0,127,255},
       smooth=Smooth.None));
   annotation (Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,
