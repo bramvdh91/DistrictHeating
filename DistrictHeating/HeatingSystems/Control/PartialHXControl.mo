@@ -5,12 +5,12 @@ partial model PartialHXControl "Partial for HX Control"
         transformation(
         extent={{-10,-10},{10,10}},
         rotation=180,
-        origin={104,80})));
+        origin={104,40})));
   Modelica.Blocks.Interfaces.RealInput senT2 annotation (Placement(
         transformation(
         extent={{-10,-10},{10,10}},
         rotation=180,
-        origin={104,40})));
+        origin={104,80})));
   Modelica.Blocks.Interfaces.RealInput T1 annotation (Placement(transformation(
         extent={{-10,-10},{10,10}},
         rotation=180,
@@ -21,7 +21,7 @@ partial model PartialHXControl "Partial for HX Control"
         rotation=180,
         origin={104,-80})));
   Modelica.Blocks.Interfaces.RealOutput y
-    annotation (Placement(transformation(extent={{96,-10},{116,10}})));
+    annotation (Placement(transformation(extent={{-96,-10},{-116,10}})));
   annotation (Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,
             -100},{100,100}}), graphics), Icon(coordinateSystem(
           preserveAspectRatio=false, extent={{-100,-100},{100,100}}),

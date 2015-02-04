@@ -44,7 +44,7 @@ partial model PartialHeatingSystem
         rotation=270,
         origin={-82,44})),choicesAllMatching=true);
 
-  HydraulicCircuits.ZoneSplitter zoneSplitter(
+  DeSchipjes.Extra.ZoneSplitter zoneSplitter(
     redeclare final package Medium = Medium,
     n=nZones,
     m_flow_nominal=sum(m_flow_zone),

@@ -1,0 +1,39 @@
+within DistrictHeating.Examples;
+model TestHouse
+
+  package Medium=IDEAS.Media.Water.Simple;
+
+  IDEAS.Interfaces.Building building(
+    isDH=true,
+    redeclare IDEAS.Buildings.Examples.BaseClasses.structure building,
+    redeclare IDEAS.Occupants.Standards.None occupant,
+    redeclare IDEAS.Buildings.Validation.BaseClasses.VentilationSystem.None
+      ventilationSystem,
+    flowPort_return(redeclare package Medium = Medium),
+    flowPort_supply(redeclare package Medium = Medium),
+    redeclare DistrictHeating.HeatingSystems.HeatExchangerdp heatingSystem)
+    annotation (Placement(transformation(extent={{-74,44},{-54,64}})));
+  inner IDEAS.SimInfoManager sim
+    annotation (Placement(transformation(extent={{34,56},{54,76}})));
+  inner Modelica.Fluid.System system
+    annotation (Placement(transformation(extent={{70,64},{90,84}})));
+  Modelica.Fluid.Sources.FixedBoundary boundary(
+    redeclare package Medium = IDEAS.Media.Water.Simple,
+    use_T=false,
+    h=0,
+    nPorts=1)
+    annotation (Placement(transformation(extent={{-10,-10},{10,10}},
+        rotation=270,
+        origin={-40,44})));
+equation
+  connect(building.flowPort_return, building.flowPort_supply) annotation (Line(
+      points={{-66,44},{-66,38},{-62,38},{-62,44}},
+      color={0,0,0},
+      smooth=Smooth.None));
+  connect(boundary.ports[1], building.flowPort_supply) annotation (Line(
+      points={{-40,34},{-40,26},{-64,26},{-64,38},{-62,38},{-62,44}},
+      color={0,127,255},
+      smooth=Smooth.None));
+  annotation (Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,
+            -100},{100,100}}), graphics));
+end TestHouse;

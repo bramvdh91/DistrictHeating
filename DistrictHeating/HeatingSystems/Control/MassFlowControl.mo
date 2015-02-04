@@ -3,22 +3,24 @@ model MassFlowControl
   extends PartialHXControl;
 
   IDEAS.Controls.Continuous.LimPID conPID
-    annotation (Placement(transformation(extent={{-10,-10},{10,10}})));
+    annotation (Placement(transformation(extent={{-10,-10},{10,10}},
+        rotation=180,
+        origin={-40,0})));
 equation
   connect(senMassFlow2, conPID.u_s) annotation (Line(
-      points={{104,80},{-20,80},{-20,0},{-12,0}},
-      color={0,0,127},
-      smooth=Smooth.None));
-  connect(senMassFlow1, conPID.u_m) annotation (Line(
-      points={{104,-80},{0,-80},{0,-12}},
+      points={{104,40},{-20,40},{-20,-1.33227e-015},{-28,-1.33227e-015}},
       color={0,0,127},
       smooth=Smooth.None));
   connect(conPID.y, y) annotation (Line(
-      points={{11,0},{106,0}},
+      points={{-51,1.33227e-015},{-48,1.33227e-015},{-48,0},{-106,0}},
       color={0,0,127},
       smooth=Smooth.None));
-  annotation (Diagram(coordinateSystem(preserveAspectRatio=false, extent={{
-            -100,-100},{100,100}}), graphics), Icon(coordinateSystem(
+  connect(conPID.u_m, senMassFlow1) annotation (Line(
+      points={{-40,12},{-40,22},{32,22},{32,-80},{104,-80}},
+      color={0,0,127},
+      smooth=Smooth.None));
+  annotation (Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,
+            -100},{100,100}}),      graphics), Icon(coordinateSystem(
           preserveAspectRatio=false, extent={{-100,-100},{100,100}}),
         graphics={              Rectangle(
         extent={{-100,-100},{100,100}},

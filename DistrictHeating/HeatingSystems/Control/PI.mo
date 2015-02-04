@@ -5,7 +5,7 @@ model PI
   extends PartialHXControl;
 
   parameter Boolean release=true;
-  parameter Modelica.SIunits.Temperature TSet=70;
+  parameter Modelica.SIunits.Temperature TSet=273.15+70;
 
   parameter Real threshold=0.0001 "Greater than threshold";
 
@@ -38,20 +38,20 @@ equation
       points={{-39,24},{-20,24},{-20,-6},{14,-6}},
       color={0,0,127},
       smooth=Smooth.None));
-  connect(product.y, y) annotation (Line(
-      points={{37,0},{106,0}},
-      color={0,0,127},
-      smooth=Smooth.None));
   connect(senMassFlow2, greaterThreshold.u) annotation (Line(
-      points={{104,80},{28,80},{28,92},{0,92},{0,80}},
+      points={{104,40},{28,40},{28,92},{0,92},{0,80}},
       color={0,0,127},
       smooth=Smooth.None));
   connect(senT2, PID.u_m) annotation (Line(
-      points={{104,40},{12,40},{12,50},{-82,50},{-82,-8},{-50,-8},{-50,12}},
+      points={{104,80},{12,80},{12,50},{-82,50},{-82,-8},{-50,-8},{-50,12}},
       color={0,0,127},
       smooth=Smooth.None));
   connect(const.y, PID.u_s) annotation (Line(
       points={{-63,-50},{-50,-50},{-50,-16},{-70,-16},{-70,24},{-62,24}},
+      color={0,0,127},
+      smooth=Smooth.None));
+  connect(y, product.y) annotation (Line(
+      points={{-106,0},{-90,0},{-90,-80},{52,-80},{52,0},{37,0}},
       color={0,0,127},
       smooth=Smooth.None));
   annotation (Icon(graphics={   Rectangle(
