@@ -9,6 +9,9 @@ model DHConnection
   parameter Boolean from_dp=false;
   parameter Modelica.SIunits.MassFlowRate m_flow_nominal;
   parameter Modelica.SIunits.Length length;
+  final parameter Modelica.SIunits.Pressure dp_nominal=
+    districtHeatingPipe.dp_nominal * districtHeatingPipe.L
+    "Nominal pressure losses over the connection";
 
   //Components
   IDEAS.Fluid.Interfaces.FlowPort_b flowPort_supply_out(redeclare package

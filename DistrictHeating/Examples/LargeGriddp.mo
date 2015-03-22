@@ -9,7 +9,7 @@ model LargeGriddp
   package Medium=IDEAS.Media.Water.Simple;
 
   Modelica.Blocks.Sources.Constant boilerSetPoint(k=273.15 + 75)
-    annotation (Placement(transformation(extent={{100,42},{80,62}})));
+    annotation (Placement(transformation(extent={{98,42},{78,62}})));
   Modelica.Fluid.Sources.FixedBoundary boundary(
     redeclare package Medium = IDEAS.Media.Water.Simple,
     use_T=false,
@@ -17,16 +17,16 @@ model LargeGriddp
     nPorts=1)
     annotation (Placement(transformation(extent={{-10,-10},{10,10}},
         rotation=270,
-        origin={52,66})));
+        origin={52,62})));
   Interfaces.FixedHead fixedHead(pressureHead=5)
-    annotation (Placement(transformation(extent={{0,58},{20,78}})));
+    annotation (Placement(transformation(extent={{0,54},{20,74}})));
   Interfaces.ThermostaticSafetyValve thermostaticSafetyValve(
     redeclare package Medium = IDEAS.Media.Water.Simple,
     m_flow_nominal=0.05,
     safetyT=348.15) annotation (Placement(transformation(
-        extent={{-10,-10},{10,10}},
-        rotation=270,
-        origin={26,-22})));
+        extent={{10,-10},{-10,10}},
+        rotation=0,
+        origin={24,-20})));
   Interfaces.DHConnection dHConnection1(
     redeclare package Medium = IDEAS.Media.Water.Simple,
     from_dp=true,
@@ -53,7 +53,7 @@ model LargeGriddp
     addPowerToMedium=false,
     measureSupplyT=true,
     measureReturnT=true)
-    annotation (Placement(transformation(extent={{32,22},{12,42}})));
+    annotation (Placement(transformation(extent={{38,22},{18,42}})));
   IDEAS.Fluid.Production.IdealHeater idealHeater(m_flow_nominal=1)
     annotation (Placement(transformation(extent={{80,22},{60,42}})));
   IDEAS.Interfaces.Building building(
@@ -212,33 +212,33 @@ equation
       color={0,0,0},
       smooth=Smooth.None));
   connect(fixedHead.y, pumpSupply_dp.u) annotation (Line(
-      points={{20.6,68},{22,68},{22,42.8}},
+      points={{20.6,64},{28,64},{28,42.8}},
       color={0,0,127},
       smooth=Smooth.None));
   connect(dHConnection2.flowPort_supply_in, pumpSupply_dp.port_b1) annotation (
       Line(
-      points={{2.2,38},{12,38}},
+      points={{2.2,38},{18,38}},
       color={0,0,0},
       smooth=Smooth.None));
   connect(dHConnection2.flowPort_return_out, pumpSupply_dp.port_a2) annotation (
      Line(
-      points={{2,26.2},{12,26.2},{12,26}},
+      points={{2,26.2},{18,26.2},{18,26}},
       color={0,0,0},
       smooth=Smooth.None));
   connect(idealHeater.port_b, pumpSupply_dp.port_a1) annotation (Line(
-      points={{60,38},{32,38}},
+      points={{60,38},{38,38}},
       color={0,127,255},
       smooth=Smooth.None));
   connect(pumpSupply_dp.port_b2, idealHeater.port_a) annotation (Line(
-      points={{32,26},{60,26}},
+      points={{38,26},{60,26}},
       color={0,127,255},
       smooth=Smooth.None));
   connect(boundary.ports[1], pumpSupply_dp.port_a1) annotation (Line(
-      points={{52,56},{52,38},{32,38}},
+      points={{52,52},{52,38},{38,38}},
       color={0,127,255},
       smooth=Smooth.None));
   connect(boilerSetPoint.y, idealHeater.TSet) annotation (Line(
-      points={{79,52},{74,52},{74,44}},
+      points={{77,52},{74,52},{74,44}},
       color={0,0,127},
       smooth=Smooth.None));
   connect(dHConnection1.flowPortIn, building.flowPort_return) annotation (Line(
@@ -336,16 +336,6 @@ equation
       points={{-28,-25.8},{-24,-25.8},{-24,-25.8},{-18,-25.8}},
       color={0,0,0},
       smooth=Smooth.None));
-  connect(dHConnection8.flowPort_supply_out, thermostaticSafetyValve.port_a)
-    annotation (Line(
-      points={{2,-14},{6,-14},{6,-4},{26,-4},{26,-12}},
-      color={0,0,0},
-      smooth=Smooth.None));
-  connect(dHConnection8.flowPort_return_in, thermostaticSafetyValve.port_b)
-    annotation (Line(
-      points={{2,-25.8},{4,-25.8},{4,-26},{6,-26},{6,-42},{26,-42},{26,-32}},
-      color={0,0,0},
-      smooth=Smooth.None));
   connect(building4.flowPort_supply, dHConnection5.flowPortOut) annotation (
       Line(
       points={{-98,-2},{-98,-8}},
@@ -380,6 +370,16 @@ equation
       smooth=Smooth.None));
   connect(building7.flowPort_return, dHConnection8.flowPortIn) annotation (Line(
       points={{-6,-2},{-6,-8}},
+      color={0,0,0},
+      smooth=Smooth.None));
+  connect(dHConnection8.flowPort_supply_out, thermostaticSafetyValve.flowPort_a)
+    annotation (Line(
+      points={{2,-14},{14,-14}},
+      color={0,0,0},
+      smooth=Smooth.None));
+  connect(dHConnection8.flowPort_return_in, thermostaticSafetyValve.flowPort_b)
+    annotation (Line(
+      points={{2,-25.8},{10,-25.8},{10,-26},{14,-26}},
       color={0,0,0},
       smooth=Smooth.None));
   annotation (Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-120,

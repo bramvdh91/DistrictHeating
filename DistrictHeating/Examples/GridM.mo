@@ -9,7 +9,7 @@ model GridM
   package Medium=IDEAS.Media.Water.Simple;
 
   Modelica.Blocks.Sources.Constant boilerSetPoint(k=273.15 + 75)
-    annotation (Placement(transformation(extent={{24,-38},{44,-18}})));
+    annotation (Placement(transformation(extent={{-2,-32},{18,-12}})));
   Modelica.Fluid.Sources.FixedBoundary boundary(
     redeclare package Medium = IDEAS.Media.Water.Simple,
     use_T=false,
@@ -17,13 +17,13 @@ model GridM
     nPorts=1)
     annotation (Placement(transformation(extent={{-10,-10},{10,10}},
         rotation=270,
-        origin={20,44})));
+        origin={-8,44})));
   Interfaces.ThermostaticSafetyValve thermostaticSafetyValve(
     redeclare package Medium = IDEAS.Media.Water.Simple,
     m_flow_nominal=0.05,
     safetyT=348.15) annotation (Placement(transformation(
         extent={{-10,-10},{10,10}},
-        rotation=270,
+        rotation=0,
         origin={-100,10})));
   Interfaces.DHConnection dHConnection1(
     redeclare package Medium = IDEAS.Media.Water.Simple,
@@ -45,7 +45,7 @@ model GridM
       dp_nominal=100))
     annotation (Placement(transformation(extent={{-50,0},{-30,22}})));
   IDEAS.Fluid.Production.IdealHeater idealHeater(m_flow_nominal=1)
-    annotation (Placement(transformation(extent={{48,0},{28,20}})));
+    annotation (Placement(transformation(extent={{20,0},{0,20}})));
   IDEAS.Interfaces.Building building(
     isDH=true,
     redeclare IDEAS.Buildings.Examples.BaseClasses.structure building,
@@ -70,20 +70,12 @@ model GridM
     annotation (Placement(transformation(extent={{-50,32},{-30,52}})));
   inner IDEAS.SimInfoManager sim
     annotation (Placement(transformation(extent={{40,80},{60,100}})));
+  inner IDEAS.Occupants.Extern.StrobeInfoManager strobe
+    annotation (Placement(transformation(extent={{20,80},{40,100}})));
 equation
 
   //BoilerViaPartials.TSet = sim.Te;
 
-  connect(dHConnection1.flowPort_supply_out, thermostaticSafetyValve.port_a)
-    annotation (Line(
-      points={{-80,16},{-86,16},{-86,24},{-100,24},{-100,20}},
-      color={0,0,0},
-      smooth=Smooth.None));
-  connect(thermostaticSafetyValve.port_b, dHConnection1.flowPort_return_in)
-    annotation (Line(
-      points={{-100,0},{-100,-6},{-86,-6},{-86,4},{-80,4},{-80,4.2}},
-      color={0,127,255},
-      smooth=Smooth.None));
   connect(dHConnection2.flowPort_supply_out, dHConnection1.flowPort_supply_in)
     annotation (Line(
       points={{-50,16},{-59.8,16}},
@@ -95,7 +87,7 @@ equation
       color={0,0,0},
       smooth=Smooth.None));
   connect(boilerSetPoint.y, idealHeater.TSet) annotation (Line(
-      points={{45,-28},{62,-28},{62,30},{42,30},{42,22}},
+      points={{19,-22},{34,-22},{34,30},{14,30},{14,22}},
       color={0,0,127},
       smooth=Smooth.None));
   connect(dHConnection1.flowPortIn, building.flowPort_return) annotation (Line(
@@ -117,17 +109,27 @@ equation
       smooth=Smooth.None));
   connect(dHConnection2.flowPort_supply_in, idealHeater.port_b) annotation (
       Line(
-      points={{-29.8,16},{28,16}},
+      points={{-29.8,16},{0,16}},
       color={0,0,0},
       smooth=Smooth.None));
   connect(dHConnection2.flowPort_return_out, idealHeater.port_a) annotation (
       Line(
-      points={{-30,4.2},{-2,4.2},{-2,4},{28,4}},
+      points={{-30,4.2},{-30,4},{0,4}},
       color={0,0,0},
       smooth=Smooth.None));
   connect(boundary.ports[1], idealHeater.port_b) annotation (Line(
-      points={{20,34},{20,16},{28,16}},
+      points={{-8,34},{-8,16},{0,16}},
       color={0,127,255},
+      smooth=Smooth.None));
+  connect(dHConnection1.flowPort_supply_out, thermostaticSafetyValve.flowPort_a)
+    annotation (Line(
+      points={{-80,16},{-90,16}},
+      color={0,0,0},
+      smooth=Smooth.None));
+  connect(thermostaticSafetyValve.flowPort_b, dHConnection1.flowPort_return_in)
+    annotation (Line(
+      points={{-90,4},{-80,4},{-80,4},{-80,4},{-80,4},{-80,4.2}},
+      color={0,0,0},
       smooth=Smooth.None));
   annotation (Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-120,
             -100},{100,100}}),      graphics), Icon(coordinateSystem(extent={{-120,

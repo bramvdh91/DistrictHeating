@@ -2,15 +2,12 @@ within DistrictHeating.HeatingSystems;
 model HeatExchangerM "Heating system with a massflow substation control"
 
   //Extensions
-  extends IDEAS.Interfaces.BaseClasses.HeatingSystem(isDH=true,
-    flowPort_supply(redeclare package Medium = Medium),
-    flowPort_return(redeclare package Medium = Medium));
-  //Packages
-  replaceable package Medium =
-      Modelica.Media.Water.ConstantPropertyLiquidWater;
+  extends IDEAS.Interfaces.BaseClasses.HeatingSystem(
+    isDH=true,
+    nEmbPorts=0);
 
   //Parameters
-  parameter Modelica.SIunits.Temperature[nZones] QNom=2000*ones(nZones)
+  parameter Modelica.SIunits.Power[nZones] QNom=2000*ones(nZones)
     "Nominal heating power of each zone";
   parameter Modelica.SIunits.Temperature TSupply=273.15+70
     "Radiator supply temperature";
@@ -59,14 +56,12 @@ model HeatExchangerM "Heating system with a massflow substation control"
     use_T=false,
     nPorts=1)
     annotation (Placement(transformation(extent={{16,-84},{36,-64}})));
-  Modelica.Thermal.HeatTransfer.Sources.FixedHeatFlow fixedHeatFlow[nZones](Q_flow=0)
-    annotation (Placement(transformation(extent={{-160,50},{-180,70}})));
   Control.Hysteresis hysteresis[nZones](
     realFalse=m_flow_nominal,
     release=false,
-    uLow=273.15 + 19,
     uHigh=273.15 + 21,
-    realTrue=0)
+    realTrue=0,
+    uLow=273.15 + 20)
     annotation (Placement(transformation(extent={{-80,30},{-60,50}})));
   IDEAS.Fluid.BaseCircuits.PumpSupply_m_flow
                                           flowController(
@@ -115,10 +110,6 @@ equation
   connect(bou.ports[1], parallelPipesSplitter.port_a) annotation (Line(
       points={{36,-74},{48,-74},{48,-36},{42,-36}},
       color={0,127,255},
-      smooth=Smooth.None));
-  connect(heatPortEmb, fixedHeatFlow.port) annotation (Line(
-      points={{-200,60},{-180,60}},
-      color={191,0,0},
       smooth=Smooth.None));
   connect(heatPortCon, rad.heatPortCon) annotation (Line(
       points={{-200,20},{-40,20},{-40,-28.8}},

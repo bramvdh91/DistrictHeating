@@ -173,12 +173,12 @@ model LargeGridM
   IDEAS.Interfaces.Building building7(
     isDH=true,
     redeclare IDEAS.Buildings.Examples.BaseClasses.structure building,
-    redeclare IDEAS.Occupants.Standards.None occupant,
     redeclare IDEAS.Buildings.Validation.BaseClasses.VentilationSystem.None
       ventilationSystem,
     flowPort_return(redeclare package Medium = Medium),
     flowPort_supply(redeclare package Medium = Medium),
-    redeclare DistrictHeating.HeatingSystems.HeatExchangerM heatingSystem)
+    redeclare DistrictHeating.HeatingSystems.HeatExchangerM heatingSystem,
+    redeclare IDEAS.Occupants.Extern.StROBe occupant)
     annotation (Placement(transformation(extent={{2,-2},{-18,18}})));
 equation
 

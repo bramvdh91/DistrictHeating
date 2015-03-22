@@ -2,15 +2,12 @@ within DistrictHeating.HeatingSystems;
 model HeatExchangerdp "Heating system with a dp substation control"
 
   //Extensions
-  extends IDEAS.Interfaces.BaseClasses.HeatingSystem(isDH=true,
-    flowPort_supply(redeclare package Medium = Medium),
-    flowPort_return(redeclare package Medium = Medium));
-  //Packages
-  replaceable package Medium =
-      Modelica.Media.Water.ConstantPropertyLiquidWater;
+  extends IDEAS.Interfaces.BaseClasses.HeatingSystem(
+    isDH=true,
+    nEmbPorts=0);
 
   //Parameters
-  parameter Modelica.SIunits.Temperature[nZones] QNom=2000*ones(nZones)
+  parameter Modelica.SIunits.Power[nZones] QNom=2000*ones(nZones)
     "Nominal heating power of each zone";
   parameter Modelica.SIunits.Temperature TSupply=273.15+70
     "Radiator supply temperature";
@@ -42,15 +39,18 @@ model HeatExchangerdp "Heating system with a dp substation control"
         extent={{-10,10},{10,-10}},
         rotation=180,
         origin={64,-42})));
-  IDEAS.Fluid.BaseCircuits.FlowController flowController(useBalancingValve=true,
+  IDEAS.Fluid.BaseCircuits.FlowController flowController(
       redeclare package Medium = Medium,
     CvDataSupply=IDEAS.Fluid.Types.CvTypes.Kv,
     m_flow_nominal=sum(m_flow_nominal),
     dpValve_nominalSupply=0,
     KvReturn=5,
-    includePipes=true,
     KvSupply=1,
-    dp=200)
+    includePipes=true,
+    measureSupplyT=false,
+    measureReturnT=false,
+    dp=200,
+    useBalancingValve=true)
     annotation (Placement(transformation(
         extent={{-10,10},{10,-10}},
         rotation=180,
@@ -59,21 +59,19 @@ model HeatExchangerdp "Heating system with a dp substation control"
     redeclare package Medium = Medium,
     m_flow_nominal=sum(m_flow_nominal),
     V=0.01)
-    annotation (Placement(transformation(extent={{42,-52},{22,-32}})));
+    annotation (Placement(transformation(extent={{30,-52},{10,-32}})));
   IDEAS.Fluid.BaseCircuits.PumpSupply_m_flow pumpSupply_m_flow[nZones](
     KvReturn=5,
     redeclare package Medium = Medium,
     m_flow_nominal=m_flow_nominal,
     includePipes=false,
     dp=200)
-    annotation (Placement(transformation(extent={{10,-52},{-10,-32}})));
+    annotation (Placement(transformation(extent={{0,-52},{-20,-32}})));
   IDEAS.Fluid.Sources.FixedBoundary bou(
     redeclare package Medium = Medium,
     use_T=false,
     nPorts=1)
     annotation (Placement(transformation(extent={{16,-84},{36,-64}})));
-  Modelica.Thermal.HeatTransfer.Sources.FixedHeatFlow fixedHeatFlow[nZones](Q_flow=0)
-    annotation (Placement(transformation(extent={{-156,50},{-176,70}})));
   Control.Hysteresis hysteresis[nZones](
     realFalse=m_flow_nominal,
     release=false,
@@ -88,7 +86,7 @@ model HeatExchangerdp "Heating system with a dp substation control"
       yMax=1,
       yMin=0,
       k=0.1,
-      Ti=300))                    annotation (Placement(transformation(
+      Ti=1000))                   annotation (Placement(transformation(
         extent={{-10,10},{10,-10}},
         rotation=180,
         origin={90,-4})));
@@ -114,38 +112,34 @@ equation
       color={0,127,255},
       smooth=Smooth.None));
   connect(heatExchanger.port_b1, parallelPipesSplitter.port_a) annotation (Line(
-      points={{54,-36},{42,-36}},
+      points={{54,-36},{30,-36}},
       color={0,127,255},
       smooth=Smooth.None));
   connect(parallelPipesSplitter.port_b, heatExchanger.port_a2) annotation (Line(
-      points={{42,-48},{54,-48}},
+      points={{30,-48},{54,-48}},
       color={0,127,255},
       smooth=Smooth.None));
   connect(parallelPipesSplitter.port_aN, pumpSupply_m_flow.port_b2) annotation (
      Line(
-      points={{22,-48},{10,-48}},
+      points={{10,-48},{0,-48}},
       color={0,127,255},
       smooth=Smooth.None));
   connect(parallelPipesSplitter.port_bN, pumpSupply_m_flow.port_a1) annotation (
      Line(
-      points={{22,-36},{10,-36}},
+      points={{10,-36},{0,-36}},
       color={0,127,255},
       smooth=Smooth.None));
   connect(pumpSupply_m_flow.port_b1, rad.port_a) annotation (Line(
-      points={{-10,-36},{-32,-36}},
+      points={{-20,-36},{-32,-36}},
       color={0,127,255},
       smooth=Smooth.None));
   connect(rad.port_b, pumpSupply_m_flow.port_a2) annotation (Line(
-      points={{-52,-36},{-60,-36},{-60,-48},{-10,-48}},
+      points={{-52,-36},{-60,-36},{-60,-48},{-20,-48}},
       color={0,127,255},
       smooth=Smooth.None));
   connect(bou.ports[1], parallelPipesSplitter.port_a) annotation (Line(
-      points={{36,-74},{48,-74},{48,-36},{42,-36}},
+      points={{36,-74},{50,-74},{50,-36},{30,-36}},
       color={0,127,255},
-      smooth=Smooth.None));
-  connect(heatPortEmb, fixedHeatFlow.port) annotation (Line(
-      points={{-200,60},{-176,60}},
-      color={191,0,0},
       smooth=Smooth.None));
   connect(heatPortCon, rad.heatPortCon) annotation (Line(
       points={{-200,20},{-40,20},{-40,-28.8}},
@@ -164,7 +158,7 @@ equation
       color={0,0,127},
       smooth=Smooth.None));
   connect(hysteresis.y, pumpSupply_m_flow.u) annotation (Line(
-      points={{-59.2,40},{0,40},{0,-31.2}},
+      points={{-59.2,40},{-10,40},{-10,-31.2}},
       color={0,0,127},
       smooth=Smooth.None));
   connect(pI.y, flowController.u) annotation (Line(

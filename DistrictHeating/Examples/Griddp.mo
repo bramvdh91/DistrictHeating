@@ -25,7 +25,7 @@ model Griddp
     m_flow_nominal=0.05,
     safetyT=348.15) annotation (Placement(transformation(
         extent={{-10,-10},{10,10}},
-        rotation=270,
+        rotation=0,
         origin={-100,10})));
   Interfaces.DHConnection dHConnection1(
     redeclare package Medium = IDEAS.Media.Water.Simple,
@@ -84,16 +84,6 @@ equation
 
   //BoilerViaPartials.TSet = sim.Te;
 
-  connect(dHConnection1.flowPort_supply_out, thermostaticSafetyValve.port_a)
-    annotation (Line(
-      points={{-80,16},{-86,16},{-86,24},{-100,24},{-100,20}},
-      color={0,0,0},
-      smooth=Smooth.None));
-  connect(thermostaticSafetyValve.port_b, dHConnection1.flowPort_return_in)
-    annotation (Line(
-      points={{-100,0},{-100,-6},{-86,-6},{-86,4},{-80,4},{-80,4.2}},
-      color={0,127,255},
-      smooth=Smooth.None));
   connect(dHConnection2.flowPort_supply_out, dHConnection1.flowPort_supply_in)
     annotation (Line(
       points={{-50,16},{-59.8,16}},
@@ -149,6 +139,16 @@ equation
   connect(dHConnection2.flowPortOut, building1.flowPort_supply) annotation (
       Line(
       points={{-38,22},{-38,32}},
+      color={0,0,0},
+      smooth=Smooth.None));
+  connect(dHConnection1.flowPort_supply_out, thermostaticSafetyValve.flowPort_a)
+    annotation (Line(
+      points={{-80,16},{-90,16}},
+      color={0,0,0},
+      smooth=Smooth.None));
+  connect(dHConnection1.flowPort_return_in, thermostaticSafetyValve.flowPort_b)
+    annotation (Line(
+      points={{-80,4.2},{-86,4.2},{-86,4},{-90,4}},
       color={0,0,0},
       smooth=Smooth.None));
   annotation (Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-120,
