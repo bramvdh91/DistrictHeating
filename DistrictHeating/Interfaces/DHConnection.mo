@@ -1,113 +1,100 @@
 within DistrictHeating.Interfaces;
 model DHConnection
 
-  //Packages
-  replaceable package Medium =Modelica.Media.Interfaces.PartialMedium
-    "Medium in the component"  annotation (choicesAllMatching = true);
+  //Extensions
+  extends IDEAS.Fluid.BaseCircuits.Interfaces.PartialBaseCircuit(
+    final includePipes=false,
+    measureSupplyT=false,
+    measureReturnT=false);
 
   //Parameters
-  parameter Boolean from_dp=false;
-  parameter Modelica.SIunits.MassFlowRate m_flow_nominal;
   parameter Modelica.SIunits.Length length;
   final parameter Modelica.SIunits.Pressure dp_nominal=
     districtHeatingPipe.dp_nominal * districtHeatingPipe.L
     "Nominal pressure losses over the connection";
 
   //Components
-  IDEAS.Fluid.Interfaces.FlowPort_b flowPort_supply_out(redeclare package
-      Medium = Medium) "Supply line out connection"
-    annotation (Placement(transformation(extent={{-110,10},{-90,30}}),
-        iconTransformation(extent={{-110,10},{-90,30}})));
-  IDEAS.Fluid.Interfaces.FlowPort_a flowPort_supply_in(redeclare package Medium
-      = Medium) "Supply line in connection"
-    annotation (Placement(transformation(extent={{92,10},{112,30}}),
-        iconTransformation(extent={{92,10},{112,30}})));
-  IDEAS.Fluid.Interfaces.FlowPort_a flowPort_return_in(redeclare package Medium
-      = Medium) "Return line in connection"
-    annotation (Placement(transformation(extent={{-110,-108},{-90,-88}}),
-        iconTransformation(extent={{-110,-108},{-90,-88}})));
-  IDEAS.Fluid.Interfaces.FlowPort_b flowPort_return_out(redeclare package
-      Medium = Medium) "Return line out connection"
-    annotation (Placement(transformation(extent={{90,-108},{110,-88}}),
-        iconTransformation(extent={{90,-108},{110,-88}})));
 
-  replaceable Pipes.BaseClasses.DistrictHeatingPipe districtHeatingPipe(
+  replaceable Pipes.DoublePipes.TwinPipeGround districtHeatingPipe(
       redeclare package Medium1 = Medium,
       redeclare package Medium2 = Medium,
-      L=length)
-    annotation (Placement(transformation(extent={{48,-74},{28,-46}})), choicesAllMatching=true);
+      L=length,
+    Pipe1(energyDynamics=energyDynamics,
+        massDynamics=massDynamics),
+    Pipe2(energyDynamics=energyDynamics,
+        massDynamics=massDynamics),
+    TIn1(tau=tauTSensor),
+    TOut2(tau=tauTSensor),
+    TOut1(tau=tauTSensor),
+    TIn2(tau=tauTSensor)) constrainedby Pipes.BaseClasses.DistrictHeatingPipe(
+      redeclare package Medium1 = Medium,
+      redeclare package Medium2 = Medium,
+      L=length,
+    Pipe1(energyDynamics=energyDynamics,
+        massDynamics=massDynamics),
+    Pipe2(energyDynamics=energyDynamics,
+        massDynamics=massDynamics),
+    TIn1(tau=tauTSensor),
+    TOut2(tau=tauTSensor),
+    TOut1(tau=tauTSensor),
+    TIn2(tau=tauTSensor))
+    annotation (Placement(transformation(extent={{-50,40},{-30,68}})), choicesAllMatching=true);
   IDEAS.Fluid.Interfaces.FlowPort_a flowPortIn(redeclare package Medium =
         Medium) "Return line from the building"
-    annotation (Placement(transformation(extent={{-30,70},{-10,90}}),
-        iconTransformation(extent={{-30,70},{-10,90}})));
+    annotation (Placement(transformation(extent={{-30,90},{-10,110}}),
+        iconTransformation(extent={{-30,90},{-10,110}})));
   IDEAS.Fluid.Interfaces.FlowPort_b flowPortOut(redeclare package Medium =
         Medium) "Supply line to the building"
-    annotation (Placement(transformation(extent={{10,70},{30,90}}),
-        iconTransformation(extent={{10,70},{30,90}})));
+    annotation (Placement(transformation(extent={{10,90},{30,110}}),
+        iconTransformation(extent={{10,90},{30,110}})));
 
   Modelica.Blocks.Sources.RealExpression realExpression(y=sim.Tground)
-    annotation (Placement(transformation(extent={{6,-116},{26,-96}})));
+    annotation (Placement(transformation(extent={{-14,10},{-34,30}})));
   outer IDEAS.SimInfoManager sim
-    annotation (Placement(transformation(extent={{-80,0},{-60,20}})));
-  Modelica.Fluid.Sensors.TemperatureTwoPort Tsupply(redeclare package Medium =
-        Medium) "Sensor of the return temperature"
-                                       annotation (Placement(transformation(
-        extent={{10,-10},{-10,10}},
-        rotation=270,
-        origin={20,-4})));
-  Modelica.Fluid.Sensors.TemperatureTwoPort TReturn(redeclare package Medium =
-        Medium) "Sensor of the return temperature"
-                                        annotation (Placement(transformation(
-        extent={{10,10},{-10,-10}},
-        rotation=90,
-        origin={-20,-18})));
+    annotation (Placement(transformation(extent={{-100,-120},{-80,-100}})));
 equation
-  connect(districtHeatingPipe.port_a1, flowPort_supply_in) annotation (Line(
-      points={{48,-54},{60,-54},{60,20},{102,20}},
-      color={0,127,255},
-      smooth=Smooth.None));
+  if not measureSupplyT then
+    connect(districtHeatingPipe.port_b1, port_b1);
+  end if;
+
+  if not measureReturnT then
+    connect(districtHeatingPipe.port_b2, port_b2);
+  end if;
+
   connect(realExpression.y, districtHeatingPipe.Tg) annotation (Line(
-      points={{27,-106},{38,-106},{38,-74.2}},
+      points={{-35,20},{-40,20},{-40,39.8}},
       color={0,0,127},
       smooth=Smooth.None));
-  connect(flowPortOut, Tsupply.port_b) annotation (Line(
-      points={{20,80},{20,6}},
+  connect(port_a2, districtHeatingPipe.port_a2) annotation (Line(
+      points={{100,-60},{40,-60},{40,48},{-30,48}},
+      color={0,127,255},
+      smooth=Smooth.None));
+  connect(flowPortIn, districtHeatingPipe.port_a2) annotation (Line(
+      points={{-20,100},{-20,48},{-30,48}},
       color={0,0,0},
       smooth=Smooth.None));
-  connect(TReturn.port_a, flowPortIn) annotation (Line(
-      points={{-20,-8},{-20,80}},
+  connect(districtHeatingPipe.port_b1, senTemSup.port_a) annotation (Line(
+      points={{-30,60},{60,60}},
       color={0,127,255},
       smooth=Smooth.None));
-  connect(districtHeatingPipe.port_b2, flowPort_return_out) annotation (Line(
-      points={{48,-66},{60,-66},{60,-98},{100,-98}},
+  connect(districtHeatingPipe.port_a1, port_a1) annotation (Line(
+      points={{-50,60},{-100,60}},
       color={0,127,255},
       smooth=Smooth.None));
-  connect(flowPort_return_in, districtHeatingPipe.port_a2) annotation (Line(
-      points={{-100,-98},{-8,-98},{-8,-66},{28,-66}},
-      color={0,0,0},
-      smooth=Smooth.None));
-  connect(districtHeatingPipe.port_b1, flowPort_supply_out) annotation (Line(
-      points={{28,-54},{0,-54},{0,20},{-100,20}},
+  connect(districtHeatingPipe.port_b2, senTemRet.port_a) annotation (Line(
+      points={{-50,48},{-60,48},{-60,-60}},
       color={0,127,255},
       smooth=Smooth.None));
-  connect(TReturn.port_b, districtHeatingPipe.port_a2) annotation (Line(
-      points={{-20,-28},{-20,-80},{-8,-80},{-8,-66},{28,-66}},
+  connect(districtHeatingPipe.port_b1, flowPortOut) annotation (Line(
+      points={{-30,60},{20,60},{20,100}},
       color={0,127,255},
-      smooth=Smooth.None));
-  connect(Tsupply.port_a, flowPort_supply_out) annotation (Line(
-      points={{20,-14},{20,-54},{0,-54},{0,20},{-100,20}},
-      color={0,127,255},
-      smooth=Smooth.None));
-  connect(flowPort_return_in, flowPort_return_in) annotation (Line(
-      points={{-100,-98},{-100,-98}},
-      color={0,0,0},
       smooth=Smooth.None));
   annotation (Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,
-            -140},{100,80}}),  graphics), Icon(coordinateSystem(
-          preserveAspectRatio=false, extent={{-100,-140},{100,80}}),
+            -100},{100,100}}), graphics), Icon(coordinateSystem(
+          preserveAspectRatio=false, extent={{-100,-100},{100,100}}),
                                                graphics={
         Rectangle(
-          extent={{-100,60},{100,-140}},
+          extent={{-100,100},{100,-100}},
           lineColor={135,135,135},
           fillPattern=FillPattern.Solid,
           fillColor={255,255,255}),
@@ -118,7 +105,7 @@ equation
           fillPattern=FillPattern.HorizontalCylinder,
           pattern=LinePattern.None,
           lineColor={0,0,0},
-          origin={-19,-85},
+          origin={-19,-47},
           rotation=90),
         Polygon(
           points={{15,11},{-15,1},{15,-11},{15,11}},
@@ -127,7 +114,7 @@ equation
           fillPattern=FillPattern.HorizontalCylinder,
           pattern=LinePattern.None,
           lineColor={0,0,0},
-          origin={65,-99},
+          origin={77,-61},
           rotation=180),
         Polygon(
           points={{11,7},{-11,1},{11,-7},{11,7}},
@@ -136,7 +123,7 @@ equation
           fillPattern=FillPattern.HorizontalCylinder,
           pattern=LinePattern.None,
           lineColor={0,0,0},
-          origin={-19,-81},
+          origin={-19,-41},
           rotation=90),
         Polygon(
           points={{-15,9},{15,-1},{-15,-11},{-15,9}},
@@ -145,7 +132,7 @@ equation
           fillPattern=FillPattern.HorizontalCylinder,
           pattern=LinePattern.None,
           lineColor={0,0,0},
-          origin={-65,19},
+          origin={-75,59},
           rotation=180),
         Polygon(
           points={{-11,5},{9,-1},{-11,-7},{-11,5}},
@@ -154,10 +141,10 @@ equation
           fillPattern=FillPattern.HorizontalCylinder,
           pattern=LinePattern.None,
           lineColor={0,0,0},
-          origin={-61,19},
+          origin={-71,59},
           rotation=180),
         Line(
-          points={{-92,20},{92,20}},
+          points={{-94,60},{90,60}},
           color={255,0,0},
           smooth=Smooth.None),
         Polygon(
@@ -167,7 +154,7 @@ equation
           fillPattern=FillPattern.HorizontalCylinder,
           pattern=LinePattern.None,
           lineColor={0,0,0},
-          origin={19,55},
+          origin={19,77},
           rotation=90),
         Polygon(
           points={{-11,5},{9,-1},{-11,-7},{-11,5}},
@@ -176,10 +163,10 @@ equation
           fillPattern=FillPattern.HorizontalCylinder,
           pattern=LinePattern.None,
           lineColor={0,0,0},
-          origin={19,51},
+          origin={19,73},
           rotation=90),
         Line(
-          points={{20,60},{20,20}},
+          points={{20,100},{20,60}},
           color={255,0,0},
           smooth=Smooth.None),
         Polygon(
@@ -189,38 +176,38 @@ equation
           fillPattern=FillPattern.HorizontalCylinder,
           pattern=LinePattern.None,
           lineColor={0,0,0},
-          origin={61,-99},
+          origin={73,-61},
           rotation=180),
         Line(
-          points={{-20,70},{-20,-92}},
+          points={{-20,100},{-20,-62}},
           color={0,0,255},
           smooth=Smooth.None),
         Line(
-          points={{100,-100},{-102,-100}},
+          points={{102,-62},{-100,-62}},
           color={0,0,255},
           smooth=Smooth.None),
         Ellipse(
-          extent={{18,22},{22,18}},
+          extent={{18,62},{22,58}},
           lineColor={255,0,0},
           fillColor={255,0,0},
           fillPattern=FillPattern.Solid),
         Ellipse(
-          extent={{-22,-98},{-18,-102}},
+          extent={{-22,-60},{-18,-64}},
           lineColor={0,0,255},
           fillColor={0,0,255},
           fillPattern=FillPattern.Solid),
         Rectangle(
-          extent={{40,30},{80,10}},
+          extent={{40,70},{80,50}},
           lineColor={255,0,0},
           fillColor={255,0,0},
           fillPattern=FillPattern.HorizontalCylinder),
         Rectangle(
-          extent={{-2,-88},{38,-108}},
+          extent={{-2,-52},{38,-72}},
           lineColor={0,0,255},
           fillColor={0,0,255},
           fillPattern=FillPattern.HorizontalCylinder),
         Text(
-          extent={{-36,-64},{120,-32}},
+          extent={{-42,-18},{114,14}},
           lineColor={135,135,135},
           fillColor={255,255,255},
           fillPattern=FillPattern.Solid,
