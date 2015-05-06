@@ -105,7 +105,7 @@ equation
           fillPattern=FillPattern.HorizontalCylinder,
           pattern=LinePattern.None,
           lineColor={0,0,0},
-          origin={-19,-47},
+          origin={-19,-45},
           rotation=90),
         Polygon(
           points={{15,11},{-15,1},{15,-11},{15,11}},
@@ -114,8 +114,8 @@ equation
           fillPattern=FillPattern.HorizontalCylinder,
           pattern=LinePattern.None,
           lineColor={0,0,0},
-          origin={77,-61},
-          rotation=180),
+          origin={-75,-61},
+          rotation=360),
         Polygon(
           points={{11,7},{-11,1},{11,-7},{11,7}},
           smooth=Smooth.None,
@@ -123,7 +123,7 @@ equation
           fillPattern=FillPattern.HorizontalCylinder,
           pattern=LinePattern.None,
           lineColor={0,0,0},
-          origin={-19,-41},
+          origin={-19,-39},
           rotation=90),
         Polygon(
           points={{-15,9},{15,-1},{-15,-11},{-15,9}},
@@ -132,8 +132,8 @@ equation
           fillPattern=FillPattern.HorizontalCylinder,
           pattern=LinePattern.None,
           lineColor={0,0,0},
-          origin={-75,59},
-          rotation=180),
+          origin={75,61},
+          rotation=360),
         Polygon(
           points={{-11,5},{9,-1},{-11,-7},{-11,5}},
           smooth=Smooth.None,
@@ -143,10 +143,6 @@ equation
           lineColor={0,0,0},
           origin={-71,59},
           rotation=180),
-        Line(
-          points={{-94,60},{90,60}},
-          color={255,0,0},
-          smooth=Smooth.None),
         Polygon(
           points={{-15,9},{15,-1},{-15,-11},{-15,9}},
           smooth=Smooth.None,
@@ -176,14 +172,14 @@ equation
           fillPattern=FillPattern.HorizontalCylinder,
           pattern=LinePattern.None,
           lineColor={0,0,0},
-          origin={73,-61},
-          rotation=180),
+          origin={-71,-61},
+          rotation=360),
         Line(
           points={{-20,100},{-20,-62}},
           color={0,0,255},
           smooth=Smooth.None),
         Line(
-          points={{102,-62},{-100,-62}},
+          points={{102,-60},{-100,-60}},
           color={0,0,255},
           smooth=Smooth.None),
         Ellipse(
@@ -192,17 +188,17 @@ equation
           fillColor={255,0,0},
           fillPattern=FillPattern.Solid),
         Ellipse(
-          extent={{-22,-60},{-18,-64}},
+          extent={{-22,-58},{-18,-62}},
           lineColor={0,0,255},
           fillColor={0,0,255},
           fillPattern=FillPattern.Solid),
         Rectangle(
-          extent={{40,70},{80,50}},
+          extent={{-76,70},{-36,50}},
           lineColor={255,0,0},
           fillColor={255,0,0},
           fillPattern=FillPattern.HorizontalCylinder),
         Rectangle(
-          extent={{-2,-52},{38,-72}},
+          extent={{-2,-50},{38,-70}},
           lineColor={0,0,255},
           fillColor={0,0,255},
           fillPattern=FillPattern.HorizontalCylinder),
@@ -212,5 +208,17 @@ equation
           fillColor={255,255,255},
           fillPattern=FillPattern.Solid,
           textString="%length m
-")}));
+"),     Polygon(
+          points={{11,7},{-11,1},{11,-7},{11,7}},
+          smooth=Smooth.None,
+          fillColor={255,255,255},
+          fillPattern=FillPattern.HorizontalCylinder,
+          pattern=LinePattern.None,
+          lineColor={0,0,0},
+          origin={67,61},
+          rotation=180),
+        Line(
+          points={{-94,60},{90,60}},
+          color={255,0,0},
+          smooth=Smooth.None)}));
 end DHConnection;
