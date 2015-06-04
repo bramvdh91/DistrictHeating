@@ -2,43 +2,32 @@ within DistrictHeating.Interfaces;
 model DHConnection
 
   //Extensions
-  extends IDEAS.Fluid.BaseCircuits.Interfaces.PartialBaseCircuit(
-    final includePipes=false,
-    measureSupplyT=false,
-    measureReturnT=false);
+  extends IDEAS.Fluid.BaseCircuits.Interfaces.CircuitInterface(
+    massDynamics=Modelica.Fluid.Types.Dynamics.SteadyState,
+    energyDynamics=Modelica.Fluid.Types.Dynamics.SteadyState);
 
   //Parameters
   parameter Modelica.SIunits.Length length;
   final parameter Modelica.SIunits.Pressure dp_nominal=
     districtHeatingPipe.dp_nominal * districtHeatingPipe.L
     "Nominal pressure losses over the connection";
+  parameter Integer tau = 120 "Time constant of the temperature sensors";
 
   //Components
-
   replaceable Pipes.DoublePipes.TwinPipeGround districtHeatingPipe(
-      redeclare package Medium1 = Medium,
-      redeclare package Medium2 = Medium,
+      redeclare package Medium = Medium,
       L=length,
-    Pipe1(energyDynamics=energyDynamics,
-        massDynamics=massDynamics),
-    Pipe2(energyDynamics=energyDynamics,
-        massDynamics=massDynamics),
-    TIn1(tau=tauTSensor),
-    TOut2(tau=tauTSensor),
-    TOut1(tau=tauTSensor),
-    TIn2(tau=tauTSensor)) constrainedby Pipes.BaseClasses.DistrictHeatingPipe(
-      redeclare package Medium1 = Medium,
-      redeclare package Medium2 = Medium,
+      massDynamics=massDynamics,
+      energyDynamics=energyDynamics,
+      tau=tau)
+    constrainedby Pipes.BaseClasses.DistrictHeatingPipe(
+      redeclare package Medium = Medium,
+      massDynamics=massDynamics,
+      energyDynamics=energyDynamics,
       L=length,
-    Pipe1(energyDynamics=energyDynamics,
-        massDynamics=massDynamics),
-    Pipe2(energyDynamics=energyDynamics,
-        massDynamics=massDynamics),
-    TIn1(tau=tauTSensor),
-    TOut2(tau=tauTSensor),
-    TOut1(tau=tauTSensor),
-    TIn2(tau=tauTSensor))
+      tau=tau)
     annotation (Placement(transformation(extent={{-50,40},{-30,68}})), choicesAllMatching=true);
+
   IDEAS.Fluid.Interfaces.FlowPort_a flowPortIn(redeclare package Medium =
         Medium) "Return line from the building"
     annotation (Placement(transformation(extent={{-30,90},{-10,110}}),
@@ -51,43 +40,37 @@ model DHConnection
   Modelica.Blocks.Sources.RealExpression realExpression(y=sim.Tground)
     annotation (Placement(transformation(extent={{-14,10},{-34,30}})));
   outer IDEAS.SimInfoManager sim
-    annotation (Placement(transformation(extent={{-100,-120},{-80,-100}})));
+    annotation (Placement(transformation(extent={{-40,-60},{-20,-40}})));
 equation
-  if not measureSupplyT then
-    connect(districtHeatingPipe.port_b1, port_b1);
-  end if;
-
-  if not measureReturnT then
-    connect(districtHeatingPipe.port_b2, port_b2);
-  end if;
 
   connect(realExpression.y, districtHeatingPipe.Tg) annotation (Line(
       points={{-35,20},{-40,20},{-40,39.8}},
       color={0,0,127},
       smooth=Smooth.None));
-  connect(port_a2, districtHeatingPipe.port_a2) annotation (Line(
-      points={{100,-60},{40,-60},{40,48},{-30,48}},
+
+  connect(port_a1, districtHeatingPipe.port_a1) annotation (Line(
+      points={{-100,60},{-50,60}},
       color={0,127,255},
       smooth=Smooth.None));
-  connect(flowPortIn, districtHeatingPipe.port_a2) annotation (Line(
-      points={{-20,100},{-20,48},{-30,48}},
+  connect(districtHeatingPipe.port_b1, port_b1) annotation (Line(
+      points={{-30,60},{100,60}},
+      color={0,127,255},
+      smooth=Smooth.None));
+  connect(flowPortOut, port_b1) annotation (Line(
+      points={{20,100},{20,60},{100,60}},
       color={0,0,0},
       smooth=Smooth.None));
-  connect(districtHeatingPipe.port_b1, senTemSup.port_a) annotation (Line(
-      points={{-30,60},{60,60}},
+  connect(districtHeatingPipe.port_a2, port_a2) annotation (Line(
+      points={{-30,48},{0,48},{0,-60},{100,-60}},
       color={0,127,255},
       smooth=Smooth.None));
-  connect(districtHeatingPipe.port_a1, port_a1) annotation (Line(
-      points={{-50,60},{-100,60}},
+  connect(districtHeatingPipe.port_b2, port_b2) annotation (Line(
+      points={{-50,48},{-60,48},{-60,-60},{-100,-60}},
       color={0,127,255},
       smooth=Smooth.None));
-  connect(districtHeatingPipe.port_b2, senTemRet.port_a) annotation (Line(
-      points={{-50,48},{-60,48},{-60,-60}},
-      color={0,127,255},
-      smooth=Smooth.None));
-  connect(districtHeatingPipe.port_b1, flowPortOut) annotation (Line(
-      points={{-30,60},{20,60},{20,100}},
-      color={0,127,255},
+  connect(flowPortIn, port_a2) annotation (Line(
+      points={{-20,100},{-20,48},{0,48},{0,-60},{100,-60}},
+      color={0,0,0},
       smooth=Smooth.None));
   annotation (Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,
             -100},{100,100}}), graphics), Icon(coordinateSystem(

@@ -3,7 +3,12 @@ partial model DistrictHeatingPipe
   "A partial for a return and supply district heating pipe model based on Kvisgaard and Hadvig (1980)"
 
   //Extensions
+  extends IDEAS.Fluid.Interfaces.LumpedVolumeDeclarations(
+    massDynamics=Modelica.Fluid.Types.Dynamics.SteadyState);
+
   extends IDEAS.Fluid.Interfaces.PartialFourPortInterface(
+    redeclare final package Medium1=Medium,
+    redeclare final package Medium2=Medium,
     m1_flow_nominal=m_flow_nominal,
     m2_flow_nominal=m_flow_nominal);
 
@@ -33,10 +38,13 @@ partial model DistrictHeatingPipe
   final parameter Modelica.SIunits.Length ri = Di/2 "Equivalent inner radius";
   final parameter Modelica.SIunits.Length D = E/2
     "Half the distance between the center of the pipes";
+  final parameter Modelica.SIunits.Mass m= Modelica.Constants.pi*Di*Di/4*L*rho;
 
   parameter Types.PressurePerLength dp_nominal=20
     "Nominal pressure drop/meter over the pipe";
   parameter Modelica.SIunits.MassFlowRate m_flow_nominal=0.1;
+
+  parameter Integer tau = 120 "Time constant of the temperature sensors";
 
 protected
   parameter Real hs "Heat loss factor for the symmetrical problem";
@@ -64,21 +72,31 @@ public
   Modelica.SIunits.Power Q1 "Heat losses of pipe 1";
   Modelica.SIunits.Power Q2 "Heat losses of pipe 2";
 
+protected
   Types.PowerPerLength Qs "Symmetrical heat losses";
   Types.PowerPerLength Qa "Assymmetrical heat losses";
 
   //Components
-  IDEAS.Fluid.Sensors.TemperatureTwoPort TIn1(redeclare package Medium =
-        Medium1, m_flow_nominal=m1_flow_nominal)
+protected
+  IDEAS.Fluid.Sensors.TemperatureTwoPort TIn1(
+    redeclare package Medium=Medium,
+    m_flow_nominal=m1_flow_nominal,
+    tau=tau)
     annotation (Placement(transformation(extent={{-80,50},{-60,70}})));
-  IDEAS.Fluid.Sensors.TemperatureTwoPort TOut1(redeclare package Medium =
-        Medium1, m_flow_nominal=m1_flow_nominal)
+  IDEAS.Fluid.Sensors.TemperatureTwoPort TOut1(
+    redeclare package Medium=Medium,
+    m_flow_nominal=m1_flow_nominal,
+    tau=tau)
     annotation (Placement(transformation(extent={{60,50},{80,70}})));
-  IDEAS.Fluid.Sensors.TemperatureTwoPort TOut2(redeclare package Medium =
-        Medium2, m_flow_nominal=m2_flow_nominal)
+  IDEAS.Fluid.Sensors.TemperatureTwoPort TOut2(
+    redeclare package Medium=Medium,
+    m_flow_nominal=m2_flow_nominal,
+    tau=tau)
     annotation (Placement(transformation(extent={{-60,-70},{-80,-50}})));
-  IDEAS.Fluid.Sensors.TemperatureTwoPort TIn2(redeclare package Medium =
-        Medium2, m_flow_nominal=m2_flow_nominal)
+  IDEAS.Fluid.Sensors.TemperatureTwoPort TIn2(
+    redeclare package Medium=Medium,
+    m_flow_nominal=m2_flow_nominal,
+    tau=tau)
     annotation (Placement(transformation(extent={{80,-70},{60,-50}})));
   Modelica.Thermal.HeatTransfer.Sources.PrescribedHeatFlow Q2Losses annotation (
      Placement(transformation(
@@ -86,15 +104,19 @@ public
         rotation=270,
         origin={0,-34})));
   IDEAS.Fluid.FixedResistances.Pipe_HeatPort Pipe1(
-    m=Modelica.Constants.pi*Di*Di/4*L*rho,
-    redeclare package Medium = Medium1,
+    m=m,
+    redeclare package Medium = Medium,
     m_flow_nominal=m1_flow_nominal,
     dp_nominal=dp_nominal*L,
+    massDynamics=massDynamics,
+    energyDynamics=energyDynamics,
     show_T=true)
     annotation (Placement(transformation(extent={{-10,50},{10,70}})));
   IDEAS.Fluid.FixedResistances.Pipe_HeatPort Pipe2(
-    m=Modelica.Constants.pi*Di*Di/4*L*rho,
-    redeclare package Medium = Medium2,
+    m=m,
+    redeclare package Medium = Medium,
+    massDynamics=massDynamics,
+    energyDynamics=energyDynamics,
     m_flow_nominal=m2_flow_nominal,
     dp_nominal=dp_nominal*L)
     annotation (Placement(transformation(extent={{10,-70},{-10,-50}})));
