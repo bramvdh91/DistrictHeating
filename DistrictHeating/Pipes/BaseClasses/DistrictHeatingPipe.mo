@@ -103,28 +103,33 @@ protected
         extent={{-10,-10},{10,10}},
         rotation=270,
         origin={0,-34})));
-  IDEAS.Fluid.FixedResistances.Pipe_HeatPort Pipe1(
-    m=m,
+  Buildings.Fluid.FixedResistances.Pipe      Pipe1(
     redeclare package Medium = Medium,
     m_flow_nominal=m1_flow_nominal,
     dp_nominal=dp_nominal*L,
     massDynamics=massDynamics,
     energyDynamics=energyDynamics,
-    show_T=true)
+    lambdaIns=0.26,
+    length=L,
+    thicknessIns=0.0001,
+    nSeg=1)
     annotation (Placement(transformation(extent={{-10,50},{10,70}})));
-  IDEAS.Fluid.FixedResistances.Pipe_HeatPort Pipe2(
-    m=m,
+  Buildings.Fluid.FixedResistances.Pipe      Pipe2(
     redeclare package Medium = Medium,
     massDynamics=massDynamics,
     energyDynamics=energyDynamics,
     m_flow_nominal=m2_flow_nominal,
-    dp_nominal=dp_nominal*L)
+    dp_nominal=dp_nominal*L,
+    lambdaIns=0.26,
+    length=L,
+    thicknessIns=0.00001,
+    nSeg=1)
     annotation (Placement(transformation(extent={{10,-70},{-10,-50}})));
   Modelica.Thermal.HeatTransfer.Sources.PrescribedHeatFlow Q1Losses annotation (
      Placement(transformation(
         extent={{-10,-10},{10,10}},
         rotation=270,
-        origin={0,88})));
+        origin={0,92})));
   Modelica.Blocks.Sources.RealExpression SupplyHeatLosses(y=-Q1)
     annotation (Placement(transformation(extent={{-40,96},{-20,116}})));
   Modelica.Blocks.Sources.RealExpression ReturnHeatLosses(y=-Q2)
@@ -158,15 +163,11 @@ equation
       color={0,127,255},
       smooth=Smooth.None));
   connect(Q2Losses.port, Pipe2.heatPort) annotation (Line(
-      points={{0,-44},{0,-50}},
-      color={191,0,0},
-      smooth=Smooth.None));
-  connect(Q1Losses.port, Pipe1.heatPort) annotation (Line(
-      points={{0,78},{0,70}},
+      points={{0,-44},{0,-55}},
       color={191,0,0},
       smooth=Smooth.None));
   connect(SupplyHeatLosses.y, Q1Losses.Q_flow) annotation (Line(
-      points={{-19,106},{0,106},{0,98}},
+      points={{-19,106},{0,106},{0,102}},
       color={0,0,127},
       smooth=Smooth.None));
   connect(ReturnHeatLosses.y, Q2Losses.Q_flow) annotation (Line(
@@ -189,6 +190,10 @@ equation
   connect(Pipe2.port_a, TIn2.port_b) annotation (Line(
       points={{10,-60},{60,-60}},
       color={0,127,255},
+      smooth=Smooth.None));
+  connect(Q1Losses.port, Pipe1.heatPort) annotation (Line(
+      points={{0,82},{0,65}},
+      color={191,0,0},
       smooth=Smooth.None));
   annotation (Icon(coordinateSystem(preserveAspectRatio=false, extent={{-100,-140},
             {100,140}}), graphics={
@@ -238,8 +243,8 @@ equation
           lineColor={255,0,0},
           fillColor={255,0,0},
           fillPattern=FillPattern.Sphere)}),
-                                 Diagram(coordinateSystem(extent={{-100,-140},{100,
-            140}},      preserveAspectRatio=false),
+                                 Diagram(coordinateSystem(extent={{-100,-140},{
+            100,140}},  preserveAspectRatio=false),
                     graphics),
               Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,
             -120},{100,120}}), graphics));
