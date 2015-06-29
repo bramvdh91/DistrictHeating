@@ -1,0 +1,1 @@
+Is mass_flow_nom needed in PlugFlowLosslessPipe? This is inherited from IDEAS.Fluid.Interface.PartialTwoPort and is not used in the rest of the component
